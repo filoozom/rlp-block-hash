@@ -11,7 +11,7 @@ const toBuffer = (string) => {
 
 const execFile = promisify(execFileCallback);
 
-export const calculateBuggyHash = async (blockNumber) => {
+export const getRawBlock = async (blockNumber) => {
   const { data } = await axios.post(rpcUrl, {
     jsonrpc: "2.0",
     id: "1",
@@ -39,9 +39,17 @@ export const calculateBuggyHash = async (blockNumber) => {
       "hex"
     ),
     Buffer.from([0, 0, 0, 0, 0, 0, 0, 0]),
-    parseInt(blockData.baseFeePerGas),
   ];
 
+  if (blockData.baseFeePerGas) {
+    raw.push(parseInt(blockData.baseFeePerGas));
+  }
+
+  return raw;
+};
+
+export const calculateBuggyHash = async (blockNumber) => {
+  const raw = await getRawBlock(blockNumber);
   return "0x" + rlphash(raw).toString("hex");
 };
 
