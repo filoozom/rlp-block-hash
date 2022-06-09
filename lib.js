@@ -16,7 +16,7 @@ export const getRawBlock = async (blockNumber) => {
     jsonrpc: "2.0",
     id: "1",
     method: "eth_getBlockByNumber",
-    params: [blockNumber, false],
+    params: ["0x" + parseInt(blockNumber).toString(16), false],
   });
 
   const blockData = data.result;
